@@ -23,7 +23,7 @@ function createWindow() {
         autoUpdater.checkForUpdatesAndNotify()
     })
 
-    // mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools()
 }
 
 app.on("ready", () => {
