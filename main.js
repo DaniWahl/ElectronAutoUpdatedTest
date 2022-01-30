@@ -67,11 +67,11 @@ autoUpdater.on("checking-for-update", () => {
     sendStatusToWindow("Checking for update...")
 })
 
-autoUpdater.on("updates-available", (info) => {
+autoUpdater.on("update-available", (info) => {
     sendStatusToWindow("Update available!")
     mainWindow.webContents.send("updates_available")
 })
-autoUpdater.on("updates-not-available", (info) => {
+autoUpdater.on("update-not-available", (info) => {
     sendStatusToWindow("You are running the latest version")
 })
 autoUpdater.on("update-downloaded", (info) => {
