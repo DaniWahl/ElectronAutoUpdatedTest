@@ -1,0 +1,24 @@
+{
+    "name": "electron-autoupdate2",
+    "version": "1.0.0",
+    "description": "tutorial for electron auto update",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DaniWahl/ElectronAutoUpdatedTest.git"
+    },
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "build": "electron-builder build --win --publish never",
+        "deploy": " electron-builder build --win --publish always"
+    },
+    "author": "Daniel Wahl",
+    "license": "ISC",
+    "devDependencies": {
+        "electron": "^16.0.8",
+        "electron-builder": "^22.14.5"
+    },
+    "dependencies": {
+        "electron-updater": "^4.6.1"
+    }
+}
