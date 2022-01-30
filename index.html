@@ -1,84 +1,89 @@
 <!DOCTYPE html>
 <head>
-  <title>Electron Auto Update Example</title>
-  <style>
-    body {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 20px;
-      font-family: sans-serif;
-      background-color: #eaeaea;
-      text-align: center;
-    }
+    <title>Electron Auto Update Example</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 20px;
+            font-family: sans-serif;
+            background-color: #eaeaea;
+            text-align: center;
+        }
 
-    #notification {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        width: 200px;
-        padding: 20px;
-        border-radius: 5px;
-        background-color: white;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    }
+        #notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 200px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
 
-    .hidden {
-        display: none;
-    }
-  </style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <h1>Electron Auto Update Example</h1>
-  <p id="version"></p>
+    <h1>Electron Auto Update Example</h1>
+    <p id="version"></p>
 
-  <div id="notification" class="hidden">
-    <p id="message">
-        <button id="close-button" onClick="closeNotification()">Close</button>
-        <button id="restart-button" onClick="restartApp()" class="hidden">Restart</button>
-    </p>
+    <div id="notification" class="hidden">
+        <p id="message">
+            <button id="close-button" onClick="closeNotification()">Close</button>
+            <button id="restart-button" onClick="restartApp()" class="hidden">Restart</button>
+        </p>
+    </div>
 
-  </div>
+    <div id="messages"></div>
 
+    <script>
+        const { ipcRenderer } = require("electron")
+        const version = document.getElementById("version")
 
+        const notification = document.getElementById("notification")
+        const message = document.getElementById("message")
+        const restartButton = document.getElementById("restart-button")
 
-  <script>
-    const { ipcRenderer } = require('electron');
-    const version = document.getElementById('version');
+        // display message on new available update
+        ipcRenderer.on("updates_available", () => {
+            ipcRenderer.removeAllListeners("updates_available")
+            message.innerText = "A new version is available. Downloading now..."
+            notification.classList.remove("hidden")
+        })
 
-    const notification = document.getElementById('notification')
-    const message = document.getElementById('message')
-    const restartButton = document.getElementById('restart-button')
-    
-    // display message on new available update
-    ipcRenderer.on('update-available', ()=>{
-        ipcRenderer.removeAllListeners('update-available')
-        message.innerText = 'A new version is available. Downloading now...'
-        notification.classList.remove('hidden')
-    })
+        // display message on update ready to install
+        ipcRenderer.on("update-downloaded", () => {
+            ipcRenderer.removeAllListeners("update-downloaded")
+            message.innerText = "Update downloaded. It will be installed on restart. Restart now?"
+            restartButton.classList.remove("hidden")
+            notification.classList.remove("hidden")
+        })
 
+        function closeNotification() {
+            notification.classList.add("hidden")
+        }
 
-    // display message on update ready to install
-    ipcRenderer.on('update-downloaded', () => {
-        ipcRenderer.removeAllListeners('update-downloaded')
-        message.innerText = 'Update downloaded. It will be installed on restart. Restart now?'
-        restartButton.classList.remove('hidden')
-        notification.classList.remove('hidden')
-    })
-    
-    function closeNotification() {
-        notification.classList.add('hidden')
-    }
+        function restartApp() {
+            ipcRenderer.send("restart-app")
+        }
 
-    function restartApp() {
-        ipcRenderer.send('restart-app')
-    }
+        ipcRenderer.on("app_version", (event, arg) => {
+            ipcRenderer.removeAllListeners("app_version")
+            version.innerText = "Version " + arg.version
+        })
 
-    ipcRenderer.on('app_version', (event, arg) => {
-      ipcRenderer.removeAllListeners('app_version');
-      version.innerText = 'Version ' + arg.version;
-    });
+        // add messages to message div
+        ipcRenderer.on("message", (event, text) => {
+            const container = document.getElementById("messages")
+            const message = document.createElement("div")
+            message.innerHTML = text
+            container.appendChild(message)
+        })
 
-
-    ipcRenderer.send('app_version');
-  </script>
+        ipcRenderer.send("app_version")
+    </script>
 </body>
