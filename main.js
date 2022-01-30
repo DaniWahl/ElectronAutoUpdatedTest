@@ -33,8 +33,6 @@ function createWindow() {
     mainWindow.once("ready-to-show", () => {
         autoUpdater.checkForUpdatesAndNotify()
     })
-
-    mainWindow.webContents.openDevTools()
 }
 
 app.on("ready", () => {
