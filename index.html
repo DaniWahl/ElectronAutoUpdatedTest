@@ -56,8 +56,8 @@
         })
 
         // display message on update ready to install
-        ipcRenderer.on("update-downloaded", () => {
-            ipcRenderer.removeAllListeners("update-downloaded")
+        ipcRenderer.on("update_downloaded", () => {
+            ipcRenderer.removeAllListeners("update_downloaded")
             message.innerText = "Update downloaded. It will be installed on restart. Restart now?"
             restartButton.classList.remove("hidden")
             notification.classList.remove("hidden")

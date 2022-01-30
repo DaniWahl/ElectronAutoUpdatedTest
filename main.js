@@ -82,7 +82,6 @@ autoUpdater.on("error", (err) => {
     sendStatusToWindow("Error in auto-updater " + err)
 })
 autoUpdater.on("download-progress", (progressObj) => {
-    let logMsg = "Downloaded " + progressObj.percent + "%"
-    logMsg = logMsg + " (" + progressObj.bytesPerSecond + " Bytes/s)"
+    let logMsg = "Downloaded " + Math.round(progressObj.percent) + "%"
     sendStatusToWindow(logMsg)
 })

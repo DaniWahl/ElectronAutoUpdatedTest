@@ -1,6 +1,6 @@
 {
     "name": "electron-autoupdate2",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "tutorial for electron auto update",
     "repository": {
         "type": "git",
